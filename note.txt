@@ -1,0 +1,219 @@
+// One way data binding
+//============== Interpoletion
+
+//------- app.component.html
+
+My name is : {{name}}
+
+//------- app.component.ts
+
+export class AppComponent {
+  name = 'app1';
+}
+
+//------- app.component.html
+
+<img width="150" src="{{imageUrl}}" alt="">
+
+//------- app.component.ts
+
+export class AppComponent {
+  imageUrl:'assets/company.jpg' | undefined = 'assets/company.jpg';
+}
+
+//============== Property Binding
+
+//------- app.component.html
+
+<img width="150" [src]="imageUrl" alt="">
+
+//------- app.component.ts
+
+export class AppComponent {
+  imageUrl:'assets/company.jpg' | undefined = 'assets/company.jpg';
+}
+
+//============== Click Event Changes
+
+//------- app.component.html
+
+<img width="150" src="{{imageUrl}}" alt="">
+<hr>
+<button (click)="click()">Click here</button>
+
+//------- app.component.ts
+
+export class AppComponent {
+  
+  name = 'app1';
+  imageUrl:string | undefined = 'assets/company.jpg';
+
+  click(){
+    this.imageUrl = 'assets/computer.jpg';
+  }
+}
+
+//============== Template Variable
+
+//------- app.component.html
+
+<input type="text" #templateVar>
+<button (click)="changeAnimal(templateVar.value)">Display Data</button>
+{{animal}}
+
+//------- app.component.ts
+
+export class AppComponent {
+
+  animal = 'Dog';
+  changeAnimal(animalName:string){
+    this.animal = animalName;
+  }
+}
+
+//============== Event Binding
+
+//------- app.component.html
+
+<input type="text" #templateVar (keyup.enter)="changeAnimal(templateVar.value)">
+{{animal}}
+
+//------- app.component.ts
+
+ animal = 'Dog';
+  changeAnimal(animalName:string){
+    this.animal = animalName;
+}
+
+//============== Attribute binding
+
+//------- app.component.html
+
+<button (click)="isDisabled=!isDisabled">Manage State</button>
+
+<input type="text" [attr.disabled]="isDisabled?'':null">
+
+//------- app.component.ts
+
+export class AppComponent {
+  
+  isDisabled = false;
+
+  /* changeState() {
+    // this.isDisabled = !this.isDisabled;
+
+    if(this.isDisabled){
+      this.isDisabled = false;
+    }else{
+      this.isDisabled = true;
+    }
+  } */
+
+}
+
+//============== Class binding
+
+//------- app.component.html
+
+<button class="btn" [class.active]="isActivated" (click)="isActivated=!isActivated">Manage State</button>
+
+//------- app.component.scss
+
+.active{
+    background-color: red;
+}
+
+//------- app.component.ts
+
+export class AppComponent {
+  
+  isActivated = false;
+
+}
+
+//============== Style binding
+
+//------- app.component.html
+
+<button class="btn" [class.active]="isActivated" (click)="isActivated=!isActivated">Manage State</button>
+
+<button [style.background-color]="isActivated?'blue':'green'">Status</button>
+
+//------- app.component.scss
+
+.active{
+    background-color: red;
+}
+
+//------- app.component.ts
+
+export class AppComponent {
+  
+  isActivated = false;
+
+}
+
+//============== Parent to child data sharing
+
+//------- app.component.html
+
+<app-header [receiveMessage]="message"></app-header>
+
+//------- app.component.ts
+
+export class AppComponent {
+  
+  message = 'this data object is from the Parent component!';
+  
+}
+
+//------- header.component.html
+
+<h1>Header Component</h1>
+<hr>
+{{receiveMessage}}
+
+//------- header.component.ts
+
+export class HeaderComponent{
+
+    @Input() receiveMessage:string='';
+
+}
+
+//============== Child to parent data sharing
+
+//------- app.component.html
+
+<app-nav-bar (dataEvent)="setData($event)"></app-nav-bar>
+<hr>
+{{childData}}
+
+//------- app.component.ts
+
+export class AppComponent {
+
+  childData:string = '';
+
+  setData(event:any){
+    this.childData = event;
+  }
+
+}
+
+//------- nav-bar.component.html
+
+<input type="text" #templateVar> &nbsp;
+<button (click)="pushData(templateVar.value)">Push Data</button>
+
+//------- nav-bar.component.ts
+
+export class NavBarComponent {
+
+  @Output() dataEvent = new EventEmitter<string>;
+
+  pushData(value:string){
+    this.dataEvent.emit(value);
+  }
+
+}
